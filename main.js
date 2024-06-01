@@ -1,4 +1,4 @@
-const {app, BrowserWindow,globalShortcut} = require('electron')
+const {app, BrowserWindow,globalShortcut,Tray, Menu} = require('electron')
 const windowStateKeeper = require('electron-window-state')
 let win;
 function create()
@@ -28,6 +28,21 @@ function create()
 
 
     win.loadFile('index.html')
+
+
+tray = new Tray('logo.png')
+tray.setToolTip('This is my app')
+// tray.on('click', ()=>{
+//     win.isVisible()?win.hide():win.show();
+// })
+
+
+
+let template =[{label: 'title1', type:'radio'},{label: 'title2',type: 'checkbox'}]
+const contextMenu = Menu.buildFromTemplate(template);
+tray.setContextMenu(contextMenu)
+
+
     // let wc = win.webContents;
     // wc.on('dom-ready', ()=>{
     //     console.log('This app Dom ready')
