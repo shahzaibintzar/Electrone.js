@@ -1,6 +1,45 @@
-const {app, BrowserWindow,globalShortcut,Tray, Menu} = require('electron')
+const {app, BrowserWindow,globalShortcut,Tray, Menu,ipcMain} = require('electron')
+
+// ipcMain.on("msg",(event,agr)=>{
+//     console.log(agr)
+//     event.reply('back-msg','Thank you for sending')
+// })
+
 const windowStateKeeper = require('electron-window-state')
 let win;
+
+// let ismac = process.platform === 'darwin'
+
+// let template = [
+//    ...ismac? {label: 'Home',submenu:[
+//         {label: 'Home'},
+//         {label: 'about' },
+//         {label: 'close' }
+//     ]}:[],
+//     {label: 'Blog'},
+//     {label: 'contect',submenu:[
+//        ismac? {role:'close', label: 'Close'}: {role:'quit', label: 'Quit'},
+//         {label: 'about' },
+//         {label: 'close' }
+//     ]}
+// ]
+
+// let menu = Menu.buildFromTemplate(template);
+
+// Menu.setApplicationMenu(menu);
+
+
+
+
+
+
+let template =[{role:'copy'},{role:'minimize'},{role:'quit'},{role:'paste'},{role:'cut'}]
+
+let contextMenu = Menu.buildFromTemplate(template);
+
+
+
+
 function create()
 {
     let mainWindowState = windowStateKeeper({
@@ -19,7 +58,8 @@ function create()
         // title:"Browser",
         // resizable:false,
         webPreferences:{
-            nodeIntegration:true
+            nodeIntegration:true,
+            // contextIsolation: false 
         }
     })
     // let child = new BrowserWindow({parent:win})
@@ -30,17 +70,22 @@ function create()
     win.loadFile('index.html')
 
 
-tray = new Tray('logo.png')
-tray.setToolTip('This is my app')
+win.webContents.on('context-menu',()=>{
+    contextMenu.popup();
+})
+
+
+// tray = new Tray('logo.png')
+// tray.setToolTip('This is my app')
 // tray.on('click', ()=>{
 //     win.isVisible()?win.hide():win.show();
 // })
 
 
 
-let template =[{label: 'title1', type:'radio'},{label: 'title2',type: 'checkbox'}]
-const contextMenu = Menu.buildFromTemplate(template);
-tray.setContextMenu(contextMenu)
+// let template =[{label: 'title1', type:'radio'},{label: 'title2',type: 'checkbox'}]
+// const contextMenu = Menu.buildFromTemplate(template);
+// tray.setContextMenu(contextMenu)
 
 
     // let wc = win.webContents;
